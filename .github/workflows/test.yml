@@ -1,0 +1,36 @@
+name: End-to-End Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      run:
+        description: 'Set to true to run the tests'
+        required: true
+        default: 'true'
+      browser:
+        description: 'Choose the browser to use'
+        required: true
+        default: 'Chrome'
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Install Google Chrome
+        run: |
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          sudo apt update
+          sudo apt install -y google-chrome-stable
+
+      - name: Set environment variables
+        run: |
+          echo "Run=${{ github.event.inputs.run }}" >> $GITHUB_ENV
+          echo "Browser=${{ github.event.inputs.browser }}" >> $GITHUB_ENV
+
+      - name: Run tests
+        run: dotnet test --configuration Release

@@ -43,7 +43,6 @@ namespace SeleniumLab.WebDriversConfigs
                     chromeOptions.AddArgument("--disable-infobars");
                     chromeOptions.AddArgument("AcceptInsecureCerts=true");
                     chromeOptions.AddArgument("--ignore-certificate-errors");
-                    chromeOptions.AddArgument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36");
                     driver = new ChromeDriver(chromeOptions);
                     break;
                 case "Edge":

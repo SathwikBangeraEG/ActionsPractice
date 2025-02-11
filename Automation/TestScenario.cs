@@ -35,45 +35,58 @@ namespace SeleniumLab.Automation
         }
         #endregion
 
-        [Test]
-        public void ClickDropdownOptions()
-        {
-            try
-            {
-                // Wait for the dropdown to appear using the label text "Grid Company"
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
-                IWebElement dropDown = wait.Until(ExpectedConditions.ElementIsVisible(
-                    By.XPath("//label[text()='Grid Company']/ancestor::div[contains(@class, 'mud-select')]")));
-                Thread.Sleep(4000);
+       [Test]
+public void ClickDropdownOptions()
+{
+    try
+    {
+        Console.WriteLine("Starting ClickDropdownOptions test...");
+        Console.Out.Flush();  // Ensure output appears in real-time
 
-                // Click to open the dropdown
-                dropDown.Click();
-                Console.WriteLine("Dropdown opened");
-                Thread.Sleep(4000);
+        // Wait for the dropdown
+        WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
+        IWebElement dropDown = wait.Until(ExpectedConditions.ElementIsVisible(
+            By.XPath("//label[text()='Grid Company']/ancestor::div[contains(@class, 'mud-select')]")));
+        
+        Thread.Sleep(4000);
+        dropDown.Click();
+        Console.WriteLine("✅ Dropdown opened");
+        Console.Out.Flush();  
 
-                // Wait for the dropdown options to become visible
-                IList<IWebElement> options = wait.Until(driver =>
-                    driver.FindElements(By.XPath("//div[contains(@class, 'mud-popover')]//div[contains(@class, 'mud-list-item-text')]")));
-                Console.WriteLine($"Options found: {options.Count}");
-                // Initialize the Actions class for hover actions
-                IWebElement secondOption = options[1];
-                secondOption.Click();
-                Thread.Sleep(2000);
-                Console.WriteLine("Second option clicked");
-                IWebElement result = wait.Until(ExpectedConditions.ElementIsVisible(
-                                   By.XPath("//label[text()='Grid Company']/ancestor::div[contains(@class, 'mud-select')]//div[contains(@class,'mud-input-slot')]")));
-                Assert.That(result.Text, Is.EqualTo("Grid Company 2"));
+        // Wait for dropdown options
+        IList<IWebElement> options = wait.Until(driver =>
+            driver.FindElements(By.XPath("//div[contains(@class, 'mud-popover')]//div[contains(@class, 'mud-list-item-text')]")));
 
-            }
-            catch (NoSuchElementException ex)
-            {
-                Console.WriteLine($"Element not found: {ex.Message}");
-            }
-            catch (WebDriverTimeoutException ex)
-            {
-                Console.WriteLine($"Timeout waiting for element: {ex.Message}");
-            }
-        }
+        Console.WriteLine($"✅ Options found: {options.Count}");
+        Console.Out.Flush();
+
+        // Select the second option
+        IWebElement secondOption = options[1];
+        secondOption.Click();
+        Thread.Sleep(2000);
+        Console.WriteLine("✅ Second option clicked");
+        Console.Out.Flush();
+
+        // Verify the selected value
+        IWebElement result = wait.Until(ExpectedConditions.ElementIsVisible(
+                           By.XPath("//label[text()='Grid Company']/ancestor::div[contains(@class, 'mud-select')]//div[contains(@class,'mud-input-slot')]")));
+
+        Assert.That(result.Text, Is.EqualTo("Grid Company 2"));
+        Console.WriteLine("✅ Test passed: Expected value is selected.");
+        Console.Out.Flush();
+    }
+    catch (NoSuchElementException ex)
+    {
+        Console.WriteLine($"❌ Element not found: {ex.Message}");
+        Console.Out.Flush();
+    }
+    catch (WebDriverTimeoutException ex)
+    {
+        Console.WriteLine($"❌ Timeout waiting for element: {ex.Message}");
+        Console.Out.Flush();
+    }
+}
+
         //[Test]
         public void Should_Open_Google_And_Search_For_Selenium()
         {
